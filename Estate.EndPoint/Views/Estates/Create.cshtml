@@ -1,0 +1,119 @@
+﻿@using DataLayer.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Estate.EndPoint.ViewModels.CreateEstateViewModel
+
+<h2>ایجاد ملک جدید</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Province"></label>
+        <input asp-for="Province" class="form-control" />
+        <span asp-validation-for="Province" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FloorNumber"></label>
+        <input asp-for="FloorNumber" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UnitNumber"></label>
+        <input asp-for="UnitNumber" class="form-control" />
+    </div>
+
+    <div class="form-check">
+        <input asp-for="HasStorage" class="form-check-input" />
+        <label asp-for="HasStorage" class="form-check-label"></label>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DocumentType"></label>
+        <select asp-for="DocumentType" asp-items="Html.GetEnumSelectList<DocumentTypeEnum>()" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EstateType"></label>
+        <select asp-for="EstateType" asp-items="Html.GetEnumSelectList<EstateTypeEnum>()" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TransactionType"></label>
+        <select asp-for="TransactionType"
+                asp-items="Html.GetEnumSelectList<TransactionTypeEnum>()"
+                class="form-control"
+                id="transactionType">
+        </select>
+    </div>
+
+    <div id="priceFields">
+        <!-- اینجا فیلدهای قیمت دینامیک اضافه میشه -->
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">ثبت</button>
+</form>
+
+@section Scripts {
+    <script>
+      function renderPriceFields() {
+    const type = parseInt(document.getElementById('transactionType').value); // چون Enum عددی است
+    const container = document.getElementById('priceFields');
+    container.innerHTML = ''; // پاک کردن فیلدهای قبلی
+
+    if (type === 1 || type === 2 || type === 4) {
+        // Mortgage, Rent, Daily_Rent → دو فیلد
+        container.innerHTML = `
+            <div class="form-group">
+                <label>مبلغ رهن</label>
+                <input name="Prices[0].Amount" class="form-control" type="number" />
+                <input name="Prices[0].PriceType" type="hidden" value="1" />
+            </div>
+            <div class="form-group">
+                <label>مبلغ اجاره</label>
+                <input name="Prices[1].Amount" class="form-control" type="number" />
+                <input name="Prices[1].PriceType" type="hidden" value="2" />
+            </div>
+        `;
+    } else if (type === 3) {
+        // Sale → یک فیلد
+        container.innerHTML = `
+            <div class="form-group">
+                <label>قیمت فروش</label>
+                <input name="Prices[0].Amount" class="form-control" type="number" />
+                <input name="Prices[0].PriceType" type="hidden" value="3" />
+            </div>
+        `;
+    }
+        }
+
+// تغییر TransactionType
+document.getElementById('transactionType').addEventListener('change', renderPriceFields);
+
+// اجرا روی بارگذاری صفحه
+renderPriceFields();
+
+    </script>
+}
