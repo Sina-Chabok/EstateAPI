@@ -1,5 +1,5 @@
 ﻿using DataLayer.Contracts.Contracts;
-using DataLayer.Errors;
+using DataLayer.Enums;
 using DataLayer.Models;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +14,12 @@ namespace Infrastructure.Repository
         {
             _context = context;
         }
-        
+
 
         public async Task<Estate?> GetById(int id)
         {
-            var estate = await _context.Estates.Where(e => e.Id == id).FirstOrDefaultAsync();
+            var estate = await _context.Estates
+                .Include(e => e.Prices).FirstOrDefaultAsync(e => e.Id == id);
             return estate;
         }
 
@@ -26,18 +27,47 @@ namespace Infrastructure.Repository
         {
             await _context.Estates.AddAsync(estate);
             await _context.SaveChangesAsync();
+
         }
 
         public async Task Update(Estate estate)
         {
-             _context.Estates.Update(estate);
+            _context.Estates.Update(estate);
             await _context.SaveChangesAsync();
+
         }
 
         public async Task Delete(Estate estate)
         {
             _context.Estates.Remove(estate);
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task InsertPrice(EstatePrice price)
+        {
+            await _context.EstatePrices.AddAsync(price);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task UpdatePrice(EstatePrice price)
+        {
+            _context.EstatePrices.Update(price);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task DeletePrice(EstatePrice price)
+        {
+            _context.EstatePrices.Remove(price);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

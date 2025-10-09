@@ -1,4 +1,5 @@
 ﻿using DataLayer.Contracts;
+using DataLayer.Errors;
 using DataLayer.Models;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,19 @@ namespace Infrastructure.Repository
         {
             _context = context;
         }
-    
+
 
         public async Task<Estate?> GetById(int id)
         {
-            return await _context.Estates.AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
-        }
+           var estate = await _context.Estates.AsNoTracking().Include(e => e.Prices).Include(e => e.User)
+                .Include(e => e.Images)
+                .FirstOrDefaultAsync(e=>e.Id == id);
+           if (estate is null)
+               throw new ArgumentNullException(EstateError.EstateNotFound);
+
+           return estate;
+
+        }       
 
         public async Task<IList<Estate>> GetAll()
         {

@@ -1,4 +1,5 @@
-﻿using DataLayer.Contracts;
+﻿using Application.DTOs;
+using DataLayer.Contracts;
 using DataLayer.Models;
 using Estate.EndPoint.ViewModels;
 using Infrastructure.Repository;
@@ -41,7 +42,7 @@ namespace Estate.EndPoint.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var estate = await _queryRepository.GetById(id);
-            if (estate == null) return NotFound();
+
             return View(estate);
         }
 
@@ -86,37 +87,70 @@ namespace Estate.EndPoint.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var estate = await _queryRepository.GetById(id);
-            if (estate == null) return NotFound();
-            return View(estate);
+
+            var model = new EditEstateViewModel
+            {
+                Id = estate.Id,
+                Title = estate.Title,
+                Description = estate.Description,
+                Province = estate.Province,
+                City = estate.City,
+                Address = estate.Address,
+                FloorNumber = estate.FloorNumber,
+                UnitNumber = estate.UnitNumber,
+                HasStorage = estate.HasStorage,
+                DocumentType = estate.DocumentType,
+                EstateType = estate.EstateType,
+                TransactionType = estate.TransactionType,
+                UserId = estate.UserId,
+                CreationDate = estate.CreationDate,
+                Prices = estate.Prices.Select(p => new EstatePriceViewModel
+                {
+                    Amount = p.Amount,
+                    PriceType = p.PriceType
+                }).ToList()
+            };
+            return View(model);
         }
 
         // POST: Estates/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DataLayer.Models.Estate estate)
+        public async Task<IActionResult> Edit(EditEstateViewModel model)
         {
-            if (ModelState.IsValid)
+            var dto = new UpdateEstateDto
             {
-                try
+                Id = model.Id,
+                Title = model.Title,
+                Description = model.Description,
+                Province = model.Province,
+                City = model.City,
+                Address = model.Address,
+                FloorNumber = model.FloorNumber,
+                UnitNumber = model.UnitNumber,
+                HasStorage = model.HasStorage,
+                DocumentType = model.DocumentType,
+                EstateType = model.EstateType,
+                TransactionType = model.TransactionType,
+                Prices = model.Prices.Select(p => new UpdateEstatePriceDto
                 {
-                    await _estateBusiness.Update(estate);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    var exists = await _estateBusiness.Update(estate.Id);
-                    if (exists == null) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(estate);
+                    PriceType = p.PriceType,
+                    Amount = p.Amount
+                }).ToList()
+            };
+
+            await _estateBusiness.Update(dto);
+            return RedirectToAction(nameof(Index));
         }
+
+
+
 
         // GET: Estates/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-           await _estateBusiness.Delete(id);
-           return RedirectToAction(nameof(Index));
+            await _estateBusiness.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
 
     }

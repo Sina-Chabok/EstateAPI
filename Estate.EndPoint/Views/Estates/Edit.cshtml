@@ -1,99 +1,130 @@
-﻿@model DataLayer.Models.Estate
+﻿@model Estate.EndPoint.ViewModels.EditEstateViewModel
+@using DataLayer.Enums
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h2>ویرایش ملک</h2>
 
-<h1>Edit</h1>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="UserId" />
 
-<h4>Estate</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Province" class="control-label"></label>
-                <input asp-for="Province" class="form-control" />
-                <span asp-validation-for="Province" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FloorNumber" class="control-label"></label>
-                <input asp-for="FloorNumber" class="form-control" />
-                <span asp-validation-for="FloorNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnitNumber" class="control-label"></label>
-                <input asp-for="UnitNumber" class="form-control" />
-                <span asp-validation-for="UnitNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="HasStorage" /> @Html.DisplayNameFor(model => model.HasStorage)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="DocumentType" class="control-label"></label>
-                <select asp-for="DocumentType" class="form-control"></select>
-                <span asp-validation-for="DocumentType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EstateType" class="control-label"></label>
-                <select asp-for="EstateType" class="form-control"></select>
-                <span asp-validation-for="EstateType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TransactionType" class="control-label"></label>
-                <select asp-for="TransactionType" class="form-control"></select>
-                <span asp-validation-for="TransactionType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Prices" class="control-label"></label>
-                <input asp-for="Prices" class="form-control" />
-                <span asp-validation-for="Prices" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Province"></label>
+            <input asp-for="Province" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="FloorNumber"></label>
+            <input asp-for="FloorNumber" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="UnitNumber"></label>
+            <input asp-for="UnitNumber" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-check mb-2">
+        <input asp-for="HasStorage" class="form-check-input" />
+        <label asp-for="HasStorage" class="form-check-label"></label>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label asp-for="DocumentType"></label>
+            <select asp-for="DocumentType" asp-items="Html.GetEnumSelectList<DocumentTypeEnum>()" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="EstateType"></label>
+            <select asp-for="EstateType" asp-items="Html.GetEnumSelectList<EstateTypeEnum>()" class="form-control"></select>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="TransactionType"></label>
+            <select asp-for="TransactionType" asp-items="Html.GetEnumSelectList<TransactionTypeEnum>()" class="form-control" id="transactionType"></select>
+        </div>
+    </div>
+
+    <div id="priceFields" class="mb-3">
+        @* فیلدهای قیمت دینامیک اینجا اضافه می‌شوند *@
+    </div>
+
+    @* CreationDate مخفی *@
+    <input type="hidden" asp-for="CreationDate" />
+
+    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function renderPriceFields() {
+            const type = parseInt(document.getElementById('transactionType').value);
+            const container = document.getElementById('priceFields');
+
+            // مقادیر قبلی حفظ می‌شوند
+            let prevMortgage = container.querySelector('input[name="Prices[0].Amount"]')?.value || 0;
+            let prevRent = container.querySelector('input[name="Prices[1].Amount"]')?.value || 0;
+            let prevSale = container.querySelector('input[name="Prices[0].Amount"]')?.value || 0;
+            let prevId0 = container.querySelector('input[name="Prices[0].Id"]')?.value || 0;
+            let prevId1 = container.querySelector('input[name="Prices[1].Id"]')?.value || 0;
+
+            container.innerHTML = '';
+
+            // Prices از مدل Razor
+            const prices = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Prices));
+
+            if (type === 3) { // Sale
+                let sale = prices.find(p => p.PriceType === 3);
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>قیمت فروش</label>
+                        <input type="hidden" name="Prices[0].Id" value="${sale?.Id || prevId0}" />
+                        <input name="Prices[0].Amount" class="form-control" type="number" value="${sale?.Amount || prevSale}" />
+                        <input name="Prices[0].PriceType" type="hidden" value="3" />
+                    </div>
+                `;
+            } else { // Rent / Mortgage
+                let mortgage = prices.find(p => p.PriceType === 2);
+                let rent = prices.find(p => p.PriceType === 1);
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>مبلغ رهن</label>
+                        <input type="hidden" name="Prices[0].Id" value="${mortgage?.Id || prevId0}" />
+                        <input name="Prices[0].Amount" class="form-control" type="number" value="${mortgage?.Amount || prevMortgage}" />
+                        <input name="Prices[0].PriceType" type="hidden" value="2" />
+                    </div>
+                    <div class="form-group">
+                        <label>مبلغ اجاره</label>
+                        <input type="hidden" name="Prices[1].Id" value="${rent?.Id || prevId1}" />
+                        <input name="Prices[1].Amount" class="form-control" type="number" value="${rent?.Amount || prevRent}" />
+                        <input name="Prices[1].PriceType" type="hidden" value="1" />
+                    </div>
+                `;
+            }
+        }
+
+        document.getElementById('transactionType').addEventListener('change', renderPriceFields);
+        renderPriceFields(); // بارگذاری اولیه
+    </script>
 }

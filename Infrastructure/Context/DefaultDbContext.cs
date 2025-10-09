@@ -12,6 +12,8 @@ namespace Infrastructure.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Estate> Estates { get; set; }
         public DbSet<EstateImage> EstateImages { get; set; }
+        public DbSet<EstatePrice> EstatePrices { get; set; }
+
 
 
 
