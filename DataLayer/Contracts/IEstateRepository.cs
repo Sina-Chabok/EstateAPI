@@ -1,6 +1,4 @@
-﻿using DataLayer.Enums;
-using DataLayer.Errors;
-using DataLayer.Models;
+﻿using DataLayer.Models;
 
 namespace DataLayer.Contracts.Contracts
 {
