@@ -1,5 +1,5 @@
-﻿using Application.DTOs;
-using DataLayer.Contracts.Contracts;
+﻿using DataLayer.Contracts.Contracts;
+using DataLayer.DTOs;
 using DataLayer.Errors;
 using DataLayer.Models;
 using Service.IBusineses;

@@ -1,10 +1,9 @@
-﻿using System.Net.Mime;
-using Application.DTOs;
+﻿using DataLayer.DTOs;
 using DataLayer.Models;
 
 namespace Service.IBusineses
 {
-    public interface IEstateBusiness
+    public interface IEstateBusiness    
     {
       
         Task Insert(Estate estate);

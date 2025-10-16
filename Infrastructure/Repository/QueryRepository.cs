@@ -1,36 +1,32 @@
-﻿using DataLayer.Contracts;
-using DataLayer.Errors;
-using DataLayer.Models;
+﻿using AutoMapper;
+using DataLayer.Contracts;
+using DataLayer.DTOs;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class QueryRepository : IQueryRepository
+    public class QueryRepository(DefaultDbContext context, IMapper mapper) : IQueryRepository
     {
-        private readonly DefaultDbContext _context;
-
-        public QueryRepository(DefaultDbContext context)
+        public async Task<GetEstateByIdDto?> GetById(int id)
         {
-            _context = context;
+            var estate = await context.Estates.AsNoTracking()
+                 .Include(e => e.Prices)
+                 .Include(e => e.User)
+                 .Include(e => e.Images)
+                 .FirstOrDefaultAsync(e => e.Id == id);
+            
+            var result = mapper.Map<GetEstateByIdDto>(estate);
+            return result;
         }
 
-
-        public async Task<Estate?> GetById(int id)
+        public async Task<IList<GetEstatesDto>> GetAll()
         {
-           var estate = await _context.Estates.AsNoTracking().Include(e => e.Prices).Include(e => e.User)
-                .Include(e => e.Images)
-                .FirstOrDefaultAsync(e=>e.Id == id);
-           if (estate is null)
-               throw new ArgumentNullException(EstateError.EstateNotFound);
+            var estates = await context.Estates.AsNoTracking().ToListAsync();
 
-           return estate;
+            var result = mapper.Map<IList<GetEstatesDto>>(estates);
+            return result;
 
-        }       
-
-        public async Task<IList<Estate>> GetAll()
-        {
-            return await _context.Estates.AsNoTracking().ToListAsync();
         }
 
     }

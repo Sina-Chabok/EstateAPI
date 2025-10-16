@@ -1,8 +1,8 @@
 ﻿using DataLayer.Enums;
 
-namespace Application.DTOs
+namespace DataLayer.DTOs
 {
-    public class InsertEstateDto
+    public class UpdateEstateDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -16,13 +16,6 @@ namespace Application.DTOs
         public DocumentTypeEnum DocumentType { get; set; }
         public EstateTypeEnum EstateType { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
-
-        public List<InsertEstatePriceDto> Prices { get; set; } = new List<InsertEstatePriceDto>();
-
-    }
-    public class InsertEstatePriceDto
-    {
-        public PriceTypeEnum PriceType { get; set; }
-        public decimal Amount { get; set; }
+        public List<UpdateEstatePriceDto> Prices { get; set; } = new();
     }
 }
