@@ -6,7 +6,7 @@ namespace Service.IBusineses
     public interface IEstateBusiness    
     {
       
-        Task Insert(Estate estate);
+        Task Insert(CreatetEstateDto estate);
         Task Update(UpdateEstateDto dto);
         Task Delete(int id);
 

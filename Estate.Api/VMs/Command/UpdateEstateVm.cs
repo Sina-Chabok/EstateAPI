@@ -1,10 +1,10 @@
-﻿using DataLayer.Enums;
+﻿using DataLayer.DTOs;
+using DataLayer.Enums;
 
-namespace DataLayer.DTOs
+namespace Estate.Api.VMs.Command
 {
-    public class UpdateEstateDto
+    public class UpdateEstateVm
     {
-        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Province { get; set; }
@@ -16,6 +16,7 @@ namespace DataLayer.DTOs
         public DocumentTypeEnum DocumentType { get; set; }
         public EstateTypeEnum EstateType { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
-        public List<UpdateEstatePriceDto> Prices { get; set; } = [];
+
+        public List<UpdateEstatePriceVm> Prices { get; set; } = [];
     }
 }

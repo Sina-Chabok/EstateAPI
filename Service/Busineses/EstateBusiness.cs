@@ -1,36 +1,52 @@
-﻿using DataLayer.Contracts.Contracts;
+﻿using AutoMapper;
+using DataLayer.Contracts.Contracts;
 using DataLayer.DTOs;
 using DataLayer.Errors;
 using DataLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using Service.IBusineses;
 
 namespace Service.Busineses
 {
-    public class EstateBusiness : IEstateBusiness
+    public class EstateBusiness(IEstateRepository estateRepository) : IEstateBusiness
     {
         private const int MinLenghtTitle = 2;
         private const int MaxLenghtTitle = 300;
         private const int MaxLenghtDescription = 2000;
         private const int MaxLenghtAddress = 500;
 
-        private readonly IEstateRepository _estateRepository;
-
-        public EstateBusiness(IEstateRepository estateRepository)
+        public async Task Insert(CreatetEstateDto modelDto)
         {
-            _estateRepository = estateRepository;
-        }
+            ValidateEstate(modelDto);
 
-        public async Task Insert(Estate estate)
-        {
-            ValidateEstate(estate);
-            await _estateRepository.Insert(estate);
+            var estate = new Estate()
+            {
+                Title = modelDto.Title,
+                Description = modelDto.Description,
+                Address = modelDto.Address,
+                City = modelDto.City,
+                Province = modelDto.Province,
+                DocumentType = modelDto.DocumentType,
+                TransactionType = modelDto.TransactionType,
+                EstateType = modelDto.EstateType,
+                UnitNumber = modelDto.UnitNumber,
+                FloorNumber = modelDto.FloorNumber,
+                HasStorage = modelDto.HasStorage,
+                UserId = modelDto.UserId,
+                Prices = modelDto.Prices?.Select(p => new EstatePrice
+                {
+                    PriceType = p.PriceType,
+                    Amount = p.Amount
+                }).ToList() ?? []
+            };
+            await estateRepository.Insert(estate);
         }
 
         public async Task Update(UpdateEstateDto dto)
         {
-            var existingEstate = await _estateRepository.GetById(dto.Id);
+            var existingEstate = await estateRepository.GetById(dto.Id);
             if (existingEstate == null)
-                throw new Exception("Estate not found");
+                throw new Exception(EstateError.EstateNotFound);
 
             existingEstate.Title = dto.Title;
             existingEstate.Description = dto.Description;
@@ -67,19 +83,20 @@ namespace Service.Busineses
             foreach (var r in removed)
                 existingEstate.Prices.Remove(r);
 
-            await _estateRepository.Update(existingEstate);
+            await estateRepository.Update(existingEstate);
         }
 
         public async Task Delete(int id)
         {
-            var estate = await _estateRepository.GetById(id);
+            var estate = await estateRepository.GetById(id);
             if (estate is null)
                 throw new ArgumentNullException(EstateError.EstateNotFound);
 
-            await _estateRepository.Delete(estate);
+            await estateRepository.Delete(estate);
 
         }
-        private void ValidateEstate(Estate estate)
+
+        private void ValidateEstate(CreatetEstateDto estate)
         {
             if (TitleIsNull(estate.Title))
                 throw new ArgumentException(EstateError.TitleIsNull);

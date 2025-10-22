@@ -1,6 +1,8 @@
 ﻿using DataLayer.Contracts;
 using DataLayer.DTOs;
+using DataLayer.Querys;
 using Estate.Api.Routes.V1;
+using Estate.Api.VMs.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Estate.Api.Controllers;
@@ -10,10 +12,17 @@ namespace Estate.Api.Controllers;
 public class QueryController(IQueryRepository repository) : ControllerBase
 {
     [HttpGet(QueryRoutes.GetAll)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] GetEstatesQueryVm param)
     {
-        var estates = await repository.GetAll();
-        return new OkObjectResult(estates);
+        var estates = await repository.GetAll(new GetEstatesQuery()
+        {
+            Title = param.Title,
+            Province = param.Province,
+            DocumentType = param.DocumentType,
+            City = param.City,
+            EstateType = param.EstateType,
+        });
+        return estates.Count == 0 ? NoContent() : new OkObjectResult(estates);
     }
 
     [HttpGet(QueryRoutes.GetById)]

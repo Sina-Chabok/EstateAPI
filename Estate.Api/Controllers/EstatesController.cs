@@ -1,81 +1,44 @@
-﻿using DataLayer.Contracts;
+﻿using AutoMapper;
 using DataLayer.DTOs;
 using DataLayer.Models;
+using Estate.Api.Routes.V1;
+using Estate.Api.VMs.Command;
 using Microsoft.AspNetCore.Mvc;
 using Service.IBusineses;
-using System.Net.Mime;
+using System.Diagnostics.Contracts;
+using System.Numerics;
 
-namespace Estate.Api.Controllers.v1
-{
-    [ApiController]
-    [Route("api/v1/")]
-    [Produces(MediaTypeNames.Application.Json)]
-    public class EstatesController(IEstateBusiness estateBusiness, IQueryRepository queryRepository)
+namespace Estate.Api.Controllers;
+
+[ApiController]
+[Route("api/v1/")]
+public class EstatesController(IEstateBusiness estateBusiness, IMapper mapper)
         : ControllerBase
+{
+    [HttpPost(EstateRoutes.Create)]
+    public async Task<IActionResult> Create([FromBody] CreateEstateVm command)
     {
-        /// <summary>
-        /// افزودن ملک جدید
-        /// </summary>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Create([FromBody] InsertEstateDto model)
-        {
-            //ToDo( این رو باید توی  پوشه وی ام مپ شون کنیم)
-            var estate = new DataLayer.Models.Estate
-            {
-                UserId = 1, // در آینده از JWT میاد
-                Title = model.Title,
-                Description = model.Description,
-                Province = model.Province,
-                City = model.City,
-                Address = model.Address,
-                FloorNumber = model.FloorNumber,
-                UnitNumber = model.UnitNumber,
-                HasStorage = model.HasStorage,
-                DocumentType = model.DocumentType,
-                EstateType = model.EstateType,
-                TransactionType = model.TransactionType,
-                Prices = model.Prices.Select(p => new EstatePrice
-                {
-                    Amount = p.Amount,
-                    PriceType = p.PriceType
-                }).ToList()
-            };
+        var dto = mapper.Map<CreatetEstateDto>(command,x=>x.AfterMap((src, dst) => { dst.UserId = 1;}));
 
-            await estateBusiness.Insert(estate);
-            return NoContent();
-        }
+        await estateBusiness.Insert(dto);
+        return Created();
+    }
 
-        /// <summary>
-        /// بروزرسانی اطلاعات ملک
-        /// </summary>
-        [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateEstateDto dto)
-        {
-            await queryRepository.GetById(id);
+    [HttpPut(EstateRoutes.Update)]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateEstateVm command)
+    {
+        var dto = mapper.Map<UpdateEstateDto>(command, x => x.AfterMap((src, dst) => { dst.Id = id; }));
 
-            dto.Id = id;
+        await estateBusiness.Update(dto);
+        return Ok();
+    }
 
-            await estateBusiness.Update(dto);
-            return NoContent();
-        }
 
-        /// <summary>
-        /// حذف ملک بر اساس Id
-        /// </summary>
-        [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> Delete(int id)
-        {
-            //ToDO
-            await queryRepository.GetById(id);
-            await estateBusiness.Delete(id);
-            return NoContent();
-        }
+    [HttpDelete(EstateRoutes.Delete)]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        await estateBusiness.Delete(id);
+        return Ok();
     }
 }
+

@@ -2,9 +2,9 @@
 
 namespace DataLayer.DTOs
 {
-    public class UpdateEstateDto
+    public class CreatetEstateDto
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Province { get; set; }
@@ -16,6 +16,8 @@ namespace DataLayer.DTOs
         public DocumentTypeEnum DocumentType { get; set; }
         public EstateTypeEnum EstateType { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
-        public List<UpdateEstatePriceDto> Prices { get; set; } = [];
+
+        public List<CreateEstatePriceDto> Prices { get; set; } = [];
+
     }
 }
