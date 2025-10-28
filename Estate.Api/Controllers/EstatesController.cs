@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using DataLayer.DTOs;
-using DataLayer.Models;
 using Estate.Api.Routes.V1;
 using Estate.Api.VMs.Command;
 using Microsoft.AspNetCore.Mvc;
 using Service.IBusineses;
-using System.Diagnostics.Contracts;
-using System.Numerics;
 
 namespace Estate.Api.Controllers;
 
@@ -32,7 +29,6 @@ public class EstatesController(IEstateBusiness estateBusiness, IMapper mapper)
         await estateBusiness.Update(dto);
         return Ok();
     }
-
 
     [HttpDelete(EstateRoutes.Delete)]
     public async Task<IActionResult> Delete([FromRoute] int id)

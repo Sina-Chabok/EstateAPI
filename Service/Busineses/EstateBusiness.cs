@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DataLayer.Contracts.Contracts;
 using DataLayer.DTOs;
+using DataLayer.Enums;
 using DataLayer.Errors;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Service.IBusineses;
+using Sina.Enums;
 
 namespace Service.Busineses
 {
@@ -17,10 +19,11 @@ namespace Service.Busineses
 
         public async Task Insert(CreatetEstateDto modelDto)
         {
-            ValidateEstate(modelDto);
+            ValidateInsertEstate(modelDto);
 
             var estate = new Estate()
             {
+                
                 Title = modelDto.Title,
                 Description = modelDto.Description,
                 Address = modelDto.Address,
@@ -96,8 +99,21 @@ namespace Service.Busineses
 
         }
 
-        private void ValidateEstate(CreatetEstateDto estate)
+        private void ValidateInsertEstate(CreatetEstateDto estate)
         {
+            if (!EnumExtensions.IsValueInEnum<DocumentTypeEnum>(estate.DocumentType))
+                throw new ArgumentException(EstateError.InvalidDocumentType);
+
+            if (!EnumExtensions.IsValueInEnum<TransactionTypeEnum>(estate.TransactionType))
+                throw new ArgumentException(EstateError.InvalidTransactionType);
+
+            if (!EnumExtensions.IsValueInEnum<EstateTypeEnum>(estate.EstateType))
+                throw new ArgumentException(EstateError.InvalidEstateType);
+
+
+
+
+
             if (TitleIsNull(estate.Title))
                 throw new ArgumentException(EstateError.TitleIsNull);
 

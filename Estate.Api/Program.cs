@@ -32,18 +32,26 @@ services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 services.AddScoped<IQueryRepository, QueryRepository>();
 services.AddScoped<IEstateRepository, EstateRepository>();
 
+services.AddCors(options =>
+{
+    options.AddPolicy("anyCors",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
+//ToDo(Exeption Handeling)
 
 var app = builder.Build();
 
-
-// Enable Swagger in development
-if (app.Environment.IsDevelopment())
-{
-   app.UseFromSwagger();
-}
+app.UseFromSwagger();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseCors("anyCors");
 app.Run();

@@ -4,11 +4,7 @@ namespace DataLayer.Querys
 {
     public class GetEstatesQuery
     {
-        public string? Title { get; set; }
-
-        public string? Province { get; set; }
-
-        public string? City { get; set; }
+        public string? Search { get; set; }
 
         public DocumentTypeEnum? DocumentType { get; set; }
 

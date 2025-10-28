@@ -16,10 +16,8 @@ public class QueryController(IQueryRepository repository) : ControllerBase
     {
         var estates = await repository.GetAll(new GetEstatesQuery()
         {
-            Title = param.Title,
-            Province = param.Province,
+            Search = param.Search,
             DocumentType = param.DocumentType,
-            City = param.City,
             EstateType = param.EstateType,
         });
         return estates.Count == 0 ? NoContent() : new OkObjectResult(estates);

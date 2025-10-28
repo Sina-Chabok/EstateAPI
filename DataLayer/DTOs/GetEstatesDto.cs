@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataLayer.Extensions;
+using Sina.Enums;
 
 namespace DataLayer.DTOs
 {
