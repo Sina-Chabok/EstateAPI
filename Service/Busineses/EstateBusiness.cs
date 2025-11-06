@@ -23,7 +23,6 @@ namespace Service.Busineses
 
             var estate = new Estate()
             {
-                
                 Title = modelDto.Title,
                 Description = modelDto.Description,
                 Address = modelDto.Address,
@@ -109,10 +108,6 @@ namespace Service.Busineses
 
             if (!EnumExtensions.IsValueInEnum<EstateTypeEnum>(estate.EstateType))
                 throw new ArgumentException(EstateError.InvalidEstateType);
-
-
-
-
 
             if (TitleIsNull(estate.Title))
                 throw new ArgumentException(EstateError.TitleIsNull);

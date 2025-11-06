@@ -1,5 +1,4 @@
-﻿using DataLayer.DTOs;
-using DataLayer.Enums;
+﻿using DataLayer.Enums;
 
 namespace Estate.Api.VMs.Command
 {
