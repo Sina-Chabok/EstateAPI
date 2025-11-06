@@ -1,12 +1,13 @@
 ﻿using DataLayer.DTOs;
-using DataLayer.Models;
 using DataLayer.Querys;
 
 namespace DataLayer.Contracts
 {
     public interface IQueryRepository
     {
-        Task<GetEstateByIdDto?> GetById(int id);
-        Task<IList<GetEstatesDto>> GetAll(GetEstatesQuery param);
+        Task<GetEstateByIdDto?> GetEstateById(int id);
+        Task<IList<GetEstatesDto>> GetAllEstates(GetEstatesQuery param);
+
+        Task<IList<GetUserDto>> GetAllUsers(GetUserQuery param);
     }
 }

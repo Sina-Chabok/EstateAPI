@@ -1,18 +1,13 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 
 namespace Service.IBusineses
 {
     public interface IUserBusiness
     {
-        Task<IList<User>> GetAll();
+        Task Insert(CreateUserDto dto);
 
-        Task<User?> GetById(int id);
-
-        Task Insert(User user);
-
-        Task Update(User user);
-
-        Task Delete(User user);
-
+        Task<string?> Login(LoginDto dto);
+        Task Delete(int id);
     }
 }

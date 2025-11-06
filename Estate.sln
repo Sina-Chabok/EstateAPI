@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{BAB15D55-F37A-47F3-87B2-D65929A2ED3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estate.Api", "Estate.Api\Estate.Api.csproj", "{85C8E19D-A2A8-4F7A-A39C-349B708BB80D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Estate.Public", "Estate.Api\Estate.Public.csproj", "{85C8E19D-A2A8-4F7A-A39C-349B708BB80D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

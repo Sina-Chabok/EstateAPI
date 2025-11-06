@@ -1,46 +1,45 @@
 ﻿using DataLayer.Contracts.Contracts;
+using DataLayer.DTOs;
 using DataLayer.Models;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(DefaultDbContext context) : IUserRepository
     {
-        private readonly DefaultDbContext _context;
-
-        public UserRepository(DefaultDbContext context)
-        {
-            _context = context;
-        }
         public async Task<User?> GetById(int id)
         {
-           return await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
-           
+           return await context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Task<User?> GetByEmail(string email)
+        {
+            return context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
         //ToDo(Sina):Add Filters
         public async Task<IList<User>> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            return await context.Users.ToListAsync();
         }
 
-        public async Task Insert(User user)
+        public async Task InsertAsync(User user)
         {
-             _context.Users.Add(user);
-             await _context.SaveChangesAsync();
+             context.Users.Add(user);
+             await context.SaveChangesAsync();
         }
 
         public async Task Update(User user)
         {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
         }
 
         public async Task Delete(User user)
         {
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
         }
     }
 }
